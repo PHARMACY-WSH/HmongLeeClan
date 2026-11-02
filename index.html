@@ -3,173 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดทำแผนผังลำดับญาติ (Family Tree Cloud App)</title>
+    <title>แผนผังลำดับเครือญาติแห่งตระกูล (Family Echo Style)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts - Prompt -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Prompt & Charm (Vintage Thai) -->
+    <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             font-family: 'Prompt', sans-serif;
         }
         
-        /* Grid background pattern for tree canvas */
-        .bg-grid-pattern {
-            background-color: #f8fafc;
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 24px 24px;
+        .font-vintage {
+            font-family: 'Charm', cursive, 'Prompt', serif;
         }
 
-        /* SVG Connection Lines Styling */
+        /* Classic Warm Grid background pattern */
+        .bg-grid-pattern {
+            background-color: #fcf9f2;
+            background-image: radial-gradient(#d7c4b7 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Family Echo Styled Connection Lines */
         .tree-line {
-            stroke: #94a3b8;
+            stroke: #8c6d58;
             stroke-width: 2.5;
             fill: none;
             transition: all 0.3s ease;
             cursor: pointer;
         }
         .tree-line:hover {
-            stroke: #6366f1;
+            stroke: #b45309;
             stroke-width: 4;
         }
         
         .spouse-line {
-            stroke: #f43f5e;
+            stroke: #b91c1c;
             stroke-width: 2.5;
             stroke-dasharray: 4 4;
             fill: none;
             cursor: pointer;
         }
         .spouse-line:hover {
-            stroke: #e11d48;
+            stroke: #991b1b;
             stroke-width: 4;
         }
 
-        .adopted-line {
-            stroke: #059669;
-            stroke-width: 2.5;
-            stroke-dasharray: 2 2;
-            fill: none;
-            cursor: pointer;
-        }
-
-        /* Custom Scrollbar */
+        /* Custom Parchment Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f5f9;
+            background: #f5efe6;
         }
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
+            background: #d7c2b0;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: #a88b77;
         }
 
-        /* Animation Keyframes */
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
+            from { opacity: 0; transform: scale(0.96); }
             to { opacity: 1; transform: scale(1); }
         }
         .animate-fade-in {
-            animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Node Cards Drag & Hover */
+        /* Node Cards Vintage Hover Effect */
         .member-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
         }
         .member-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 22px -4px rgba(120, 53, 15, 0.18);
         }
 
-        /* Custom File Input */
         input[type="file"]::file-selector-button {
-            margin-right: 1rem;
+            margin-right: 0.8rem;
             padding: 0.4rem 1rem;
-            border-radius: 0.375rem;
-            background-color: #e0f2fe;
-            color: #0369a1;
-            border: none;
+            border-radius: 0.5rem;
+            background-color: #fef3c7;
+            color: #78350f;
+            border: 1px solid #fde68a;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
         input[type="file"]::file-selector-button:hover {
-            background-color: #bae6fd;
+            background-color: #fde68a;
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 h-screen overflow-hidden flex flex-col">
+<body class="bg-amber-900/10 text-amber-950 h-screen overflow-hidden flex flex-col">
 
-    <!-- Top Navigation Bar -->
-    <header class="bg-white border-b border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-3 z-20 shadow-sm">
+    <!-- Top Vintage Navigation Bar -->
+    <header class="bg-[#f5efe6] border-b border-amber-900/20 px-4 py-3 flex flex-wrap items-center justify-between gap-3 z-20 shadow-sm">
         <!-- Logo & Title -->
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-indigo-200">
-                <i class="fa-solid fa-sitemap"></i>
+            <div class="w-10 h-10 rounded-xl bg-amber-800 text-amber-50 flex items-center justify-center text-xl font-bold shadow-md shadow-amber-900/20">
+                <i class="fa-solid fa-tree"></i>
             </div>
             <div>
-                <h1 class="font-bold text-lg leading-tight text-slate-800">แผนผังลำดับญาติของตระกูล</h1>
-                <p class="text-xs text-slate-500">ระบบบันทึกและเชื่อมโยงเครือญาติบน Cloud Database</p>
+                <h1 class="font-bold text-xl leading-tight text-amber-950 font-vintage tracking-wide">แผนผังลำดับเครือญาติแห่งตระกูล</h1>
+                <p class="text-xs text-amber-800/80">บันทึกสายเลือด สืบสานประวัติศาสตร์และตระกูล (Family Echo Style)</p>
             </div>
         </div>
 
-        <!-- Center Search Bar -->
+        <!-- Search Bar -->
         <div class="relative flex-1 max-w-md mx-2">
             <div class="relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, ชื่อเล่น หรือนามสกุล..." 
-                    class="w-full pl-9 pr-8 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
-                <button id="clearSearchBtn" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </button>
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-amber-700/60"></i>
+                <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, นามสกุลเดิม, ชื่อเล่น..." 
+                    class="w-full pl-9 pr-8 py-1.5 text-sm bg-stone-50/80 border border-amber-900/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-700 focus:bg-white transition-all text-amber-950">
             </div>
-            <!-- Search Dropdown Results -->
-            <div id="searchResults" class="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-y-auto hidden z-50"></div>
         </div>
 
-        <!-- User Controls & Auth Action Bar -->
+        <!-- User Controls & Action Bar -->
         <div class="flex items-center gap-2">
             <!-- Sync Status Indicator -->
-            <div id="syncStatus" class="hidden flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-600">
-                <span id="syncDot" class="w-2 h-2 rounded-full bg-slate-400"></span>
+            <div id="syncStatus" class="hidden flex items-center gap-1.5 bg-amber-100/60 border border-amber-900/15 px-2.5 py-1 rounded-lg text-xs font-medium text-amber-900">
+                <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-500"></span>
                 <span id="syncText" class="hidden sm:inline">เตรียมพร้อม</span>
             </div>
 
-            <!-- Connect Mode Toggle Button -->
-            <button id="connectModeBtn" onclick="toggleConnectMode()" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-sm font-medium transition border border-slate-300">
-                <i class="fa-solid fa-link text-indigo-600"></i>
+            <!-- Family Echo Quick Add Action Bar -->
+            <button id="connectModeBtn" onclick="toggleConnectMode()" class="flex items-center gap-1.5 bg-amber-100/80 hover:bg-amber-200/80 text-amber-900 px-3 py-1.5 rounded-lg text-sm font-medium transition border border-amber-900/20 shadow-sm">
+                <i class="fa-solid fa-diagram-project text-amber-800"></i>
                 <span class="hidden md:inline">โยงความสัมพันธ์</span>
             </button>
 
-            <!-- Add Root Member (If Tree Empty) -->
-            <button id="addRootBtn" onclick="openAddModal(null, 'root')" class="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition shadow-sm">
+            <!-- Add Root Member -->
+            <button id="addRootBtn" onclick="openAddModal(null, 'root')" class="flex items-center gap-1.5 bg-amber-800 hover:bg-amber-900 text-amber-50 px-3 py-1.5 rounded-lg text-sm font-medium transition shadow-md shadow-amber-900/20">
                 <i class="fa-solid fa-user-plus"></i>
-                <span class="hidden md:inline">เพิ่มสมาชิก</span>
+                <span class="hidden md:inline">เพิ่มต้นตระกูล</span>
             </button>
 
-            <div class="h-6 w-[1px] bg-slate-200 mx-1"></div>
+            <div class="h-6 w-[1px] bg-amber-900/20 mx-1"></div>
 
-            <!-- User Auth Profile Button / Modal Trigger -->
+            <!-- User Auth Profile Button -->
             <div id="userAuthSection" class="flex items-center gap-2">
-                <button id="loginModalBtn" onclick="openAuthModal('login')" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-1.5 rounded-lg text-sm font-medium transition shadow-sm">
-                    <i class="fa-solid fa-right-to-bracket"></i>
+                <button id="loginModalBtn" onclick="openAuthModal('login')" class="flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-amber-100 px-3.5 py-1.5 rounded-lg text-sm font-medium transition shadow-sm">
+                    <i class="fa-solid fa-key"></i>
                     <span>เข้าสู่ระบบ</span>
                 </button>
                 
                 <div id="userInfoDropdown" class="hidden flex items-center gap-2">
-                    <div class="flex items-center gap-2 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-lg">
-                        <i class="fa-solid fa-user-check text-indigo-600 text-xs"></i>
-                        <span id="userDisplayName" class="text-xs font-semibold text-indigo-900 max-w-[120px] truncate">ผู้ใช้งาน</span>
+                    <div class="flex items-center gap-2 bg-amber-200/50 border border-amber-800/20 px-3 py-1 rounded-lg">
+                        <i class="fa-solid fa-user-shield text-amber-800 text-xs"></i>
+                        <span id="userDisplayName" class="text-xs font-semibold text-amber-950 max-w-[120px] truncate">ผู้ใช้งาน</span>
                     </div>
-                    <button onclick="handleSignOut()" title="ออกจากระบบ" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg text-sm transition">
+                    <button onclick="handleSignOut()" title="ออกจากระบบ" class="p-2 text-rose-700 hover:bg-rose-100/50 rounded-lg text-sm transition">
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                 </div>
@@ -181,42 +170,45 @@
     <div class="flex-1 flex overflow-hidden relative">
 
         <!-- Floating Zoom Controls -->
-        <div class="absolute bottom-6 right-6 z-10 flex flex-col bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
-            <button onclick="zoomIn()" title="ซูมเข้า" class="p-2.5 hover:bg-slate-100 text-slate-700 border-b border-slate-100 transition">
+        <div class="absolute bottom-6 right-6 z-10 flex flex-col bg-[#fcf9f2] rounded-xl shadow-lg border border-amber-900/20 overflow-hidden">
+            <button onclick="zoomIn()" title="ซูมเข้า" class="p-2.5 hover:bg-amber-100/60 text-amber-900 border-b border-amber-900/10 transition">
                 <i class="fa-solid fa-plus"></i>
             </button>
-            <button onclick="resetZoomPan()" title="จัดกึ่งกลาง" class="p-2.5 hover:bg-slate-100 text-slate-700 border-b border-slate-100 text-xs font-semibold transition">
+            <button onclick="resetZoomPan()" title="จัดกึ่งกลาง" class="p-2.5 hover:bg-amber-100/60 text-amber-900 border-b border-amber-900/10 text-xs font-semibold transition">
                 100%
             </button>
-            <button onclick="zoomOut()" title="ซูมออก" class="p-2.5 hover:bg-slate-100 text-slate-700 transition">
+            <button onclick="zoomOut()" title="ซูมออก" class="p-2.5 hover:bg-amber-100/60 text-amber-900 transition">
                 <i class="fa-solid fa-minus"></i>
             </button>
         </div>
 
-        <!-- Legend Floating Box -->
-        <div class="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur border border-slate-200/80 p-3 rounded-xl shadow-sm text-xs space-y-2">
-            <div class="font-semibold text-slate-700 border-b border-slate-200 pb-1">สัญลักษณ์ผัง</div>
-            <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span>
-                <span class="text-slate-600">ชาย</span>
-                <span class="w-3 h-3 rounded-full bg-pink-500 inline-block ml-2"></span>
-                <span class="text-slate-600">หญิง</span>
+        <!-- Family Echo Vintage Legend Box -->
+        <div class="absolute top-4 left-4 z-10 bg-[#fbf7ee]/90 backdrop-blur border border-amber-900/20 p-3.5 rounded-xl shadow-md text-xs space-y-2 text-amber-950">
+            <div class="font-bold text-amber-900 border-b border-amber-900/15 pb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-book-bookmark"></i> สัญลักษณ์เครือญาติ
             </div>
-            <div class="flex items-center gap-2">
-                <span class="w-3 h-1 bg-rose-500 border-t border-dashed border-rose-500"></span>
-                <span class="text-slate-600">คู่สมรส</span>
-                <span class="w-3 h-0.5 bg-slate-400"></span>
-                <span class="text-slate-600">สายเลือด</span>
-                <span class="w-3 h-1 bg-emerald-600 border-t border-dotted border-emerald-600 ml-1"></span>
-                <span class="text-slate-600">บุตรบุญธรรม</span>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 rounded-full bg-sky-700 inline-block border border-sky-800"></span>
+                    <span class="text-stone-700">ชาย</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 rounded-full bg-rose-700 inline-block border border-rose-800"></span>
+                    <span class="text-stone-700">หญิง</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 pt-0.5">
+                <span class="w-4 h-1 bg-rose-700 border-t border-dashed border-rose-700"></span>
+                <span class="text-stone-700">คู่สมรส</span>
+                <span class="w-4 h-0.5 bg-amber-800 ml-1"></span>
+                <span class="text-stone-700">สายเลือด</span>
             </div>
         </div>
 
-        <div id="connectNoticeBanner" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-indigo-600 text-white px-4 py-2 rounded-full shadow-lg text-xs font-semibold flex items-center gap-2 animate-bounce">
+        <div id="connectNoticeBanner" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-amber-800 text-amber-50 px-4 py-2 rounded-full shadow-lg text-xs font-semibold flex items-center gap-2 animate-bounce border border-amber-700">
             <i class="fa-solid fa-hand-pointer"></i>
             <span id="connectNoticeText">คลิกเลือกสมาชิกคนที่ 1 เพื่อเริ่มเชื่อมความสัมพันธ์...</span>
-            <button onclick="toggleConnectMode(false)" class="ml-2 hover:bg-indigo-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px]">✕</button>
-        </div>
+            <button onclick="toggleConnectMode(false)" class="ml-2 hover:bg-amber-900 rounded-full w-4 h-4 flex items-center justify-center text-[10px]">✕</button>
         </div>
 
         <!-- Interactive Canvas Area -->
@@ -228,249 +220,261 @@
         </main>
     </div>
 
-    <!-- MEMBER DETAILS SIDE PANEL (Drawer) -->
-    <div id="detailDrawer" class="fixed inset-y-0 right-0 w-80 md:w-96 bg-white shadow-2xl border-l border-slate-200 z-40 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-        <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-            <h3 class="font-bold text-slate-800 text-base">ข้อมูลสมาชิก</h3>
-            <button onclick="closeDetailDrawer()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+    <!-- MEMBER DETAILS & CONTROL PANEL (Drawer) -->
+    <div id="detailDrawer" class="fixed inset-y-0 right-0 w-80 md:w-96 bg-[#fcf9f2] shadow-2xl border-l border-amber-900/20 z-40 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="p-4 border-b border-amber-900/15 flex items-center justify-between bg-[#f4ece1]">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-address-card text-amber-800"></i>
+                <h3 class="font-bold text-amber-950 text-base font-vintage">รายละเอียดข้อมูลญาติ</h3>
+            </div>
+            <button onclick="closeDetailDrawer()" class="text-amber-800/60 hover:text-amber-950 p-1 rounded-lg">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
         <div class="flex-1 overflow-y-auto p-5 space-y-5" id="drawerBody"></div>
-        <div class="p-4 border-t border-slate-100 bg-slate-50 flex gap-2">
-            <button id="drawerEditBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg text-sm font-medium transition flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-pen-to-square"></i> แก้ไข
+        <div class="p-4 border-t border-amber-900/15 bg-[#f4ece1] flex gap-2">
+            <button id="drawerEditBtn" class="flex-1 bg-amber-800 hover:bg-amber-900 text-amber-50 py-2 rounded-lg text-sm font-medium transition flex items-center justify-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-pen-to-square"></i> แก้ไขข้อมูล
             </button>
-            <button id="drawerDeleteBtn" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 py-2 px-3 rounded-lg text-sm font-medium transition">
+            <button id="drawerDeleteBtn" class="bg-rose-100/80 hover:bg-rose-200 text-rose-800 border border-rose-300 py-2 px-3 rounded-lg text-sm font-medium transition">
                 <i class="fa-solid fa-trash-can"></i>
             </button>
         </div>
     </div>
 
-    <!-- AUTHENTICATION MODAL (Login / Register / Phone) -->
-    <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-fade-in border border-slate-100">
-            <!-- Auth Header Tabs -->
-            <div class="flex border-b border-slate-100 bg-slate-50">
-                <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-3 text-sm font-semibold text-indigo-600 border-b-2 border-indigo-600 bg-white">
-                    เข้าสู่ระบบ
-                </button>
-                <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-3 text-sm font-semibold text-slate-500 hover:text-slate-700">
-                    ลงทะเบียน
-                </button>
-            </div>
-
-            <div class="p-6">
-                <!-- Login Form -->
-                <form id="loginForm" onsubmit="handleEmailLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">อีเมล</label>
-                        <input type="email" id="loginEmail" required placeholder="name@example.com" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">รหัสผ่าน</label>
-                        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                    <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold shadow-md transition">
-                        เข้าสู่ระบบ
-                    </button>
-                </form>
-
-                <!-- Register Form -->
-                <form id="registerForm" onsubmit="handleEmailRegister(event)" class="space-y-4 hidden">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อผู้ใช้งาน / ชื่อตระกูล</label>
-                        <input type="text" id="regDisplayName" required placeholder="เช่น ตระกูลใจดี" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">อีเมล</label>
-                        <input type="email" id="regEmail" required placeholder="name@example.com" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">รหัสผ่าน (ขั้นต่ำ 6 ตัวอักษร)</label>
-                        <input type="password" id="regPassword" required minlength="6" placeholder="••••••••" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                    <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold shadow-md transition">
-                        สมัครสมาชิก
-                    </button>
-                </form>
-
-                <div class="relative my-5">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
-                    <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-2 text-slate-400">หรือ</span></div>
-                </div>
-
-                <!-- Google / Anonymous Auth Methods -->
-                <div class="space-y-2">
-                    <button type="button" onclick="handleGoogleSignIn()" class="w-full py-2 px-3 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center justify-center gap-2">
-                        <i class="fa-brands fa-google text-rose-500 text-sm"></i>
-                        <span>เข้าสู่ระบบด้วย Google</span>
-                    </button>
-                    <button type="button" onclick="handleAnonymousSignIn()" class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-medium text-slate-600 transition">
-                        ทดลองใช้งานแบบไม่เข้าสู่ระบบ (Guest Mode)
-                    </button>
-                </div>
-            </div>
-
-            <div class="p-3 bg-slate-50 border-t border-slate-100 text-center">
-                <button type="button" onclick="closeAuthModal()" class="text-xs text-slate-500 hover:text-slate-700">ปิดหน้าต่างนี้</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MEMBER FORM MODAL (Add / Edit) -->
-    <div id="memberModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden animate-fade-in">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                <h3 id="modalTitle" class="font-bold text-slate-800 text-lg">เพิ่มสมาชิกใหม่</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 p-1">
+    <!-- FAMILY ECHO MEMBER FORM MODAL -->
+    <div id="memberModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-[#fcf9f2] rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-fade-in border border-amber-900/30">
+            <div class="px-6 py-4 border-b border-amber-900/15 flex items-center justify-between bg-[#f4ece1]">
+                <h3 id="modalTitle" class="font-bold text-amber-950 text-lg font-vintage">เพิ่มสมาชิกในผังตระกูล</h3>
+                <button onclick="closeModal()" class="text-amber-800/60 hover:text-amber-950 p-1">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
 
-            <form id="memberForm" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <form id="memberForm" class="flex-1 overflow-y-auto p-6 space-y-4 text-amber-950">
                 <input type="hidden" id="memberId">
                 <input type="hidden" id="relTargetId">
                 <input type="hidden" id="relType">
 
-                <div id="relInfoBanner" class="hidden p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-xs text-indigo-700 font-medium flex items-center gap-2">
-                    <i class="fa-solid fa-link text-indigo-500"></i>
-                    <span id="relInfoText">เพิ่มเป็นคู่สมรส...</span>
+                <div id="relInfoBanner" class="hidden p-3 bg-amber-100/70 border border-amber-800/20 rounded-xl text-xs text-amber-900 font-medium flex items-center gap-2">
+                    <i class="fa-solid fa-sitemap text-amber-800"></i>
+                    <span id="relInfoText">เพิ่มสมาชิกใหม่...</span>
                 </div>
 
+                <!-- Photo Upload -->
                 <div class="flex flex-col items-center gap-2 pb-2">
                     <div class="relative group">
-                        <img id="photoPreview" src="https://placehold.co/120x120/e2e8f0/64748b?text=รูปถ่าย" 
-                            class="w-24 h-24 rounded-full object-cover border-4 border-indigo-50 shadow-md">
-                        <label for="photoInput" class="absolute bottom-0 right-0 bg-indigo-600 text-white p-2 rounded-full shadow-lg cursor-pointer hover:bg-indigo-700 transition">
+                        <img id="photoPreview" src="https://placehold.co/120x120/f3e8ff/78350f?text=รูปถ่าย" 
+                            class="w-24 h-24 rounded-full object-cover border-4 border-amber-200 shadow-md">
+                        <label for="photoInput" class="absolute bottom-0 right-0 bg-amber-800 text-amber-50 p-2 rounded-full shadow-lg cursor-pointer hover:bg-amber-900 transition">
                             <i class="fa-solid fa-camera text-xs"></i>
                         </label>
                     </div>
                     <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
                 </div>
 
+                <!-- Personal Name Information -->
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อจริง <span class="text-rose-500">*</span></label>
-                        <input type="text" id="firstName" required class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-amber-900 mb-1">ชื่อจริง <span class="text-rose-600">*</span></label>
+                        <input type="text" id="firstName" required class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">นามสกุล</label>
-                        <input type="text" id="lastName" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-amber-900 mb-1">นามสกุลปัจจุบัน</label>
+                        <input type="text" id="lastName" class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อเล่น</label>
-                        <input type="text" id="nickname" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-amber-900 mb-1">นามสกุลเดิม (ก่อนแต่งงาน)</label>
+                        <input type="text" id="maidenName" placeholder="เช่น นามสกุลก่อนแต่งงาน" class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">เพศ <span class="text-rose-500">*</span></label>
-                        <select id="gender" required class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                        <label class="block text-xs font-semibold text-amber-900 mb-1">ชื่อเล่น / ชื่อเรียกในตระกูล</label>
+                        <input type="text" id="nickname" class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Gender & Symbols -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-900 mb-1">เพศกำเนิด <span class="text-rose-600">*</span></label>
+                        <select id="gender" required class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none">
                             <option value="male">ชาย</option>
                             <option value="female">หญิง</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-900 mb-1">สัญลักษณ์ / เกียรติยศ</label>
+                        <select id="badgeSymbol" class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                            <option value="">-- ไม่มี --</option>
+                            <option value="👑">👑 ผู้นำตระกูล / ต้นตระกูล</option>
+                            <option value="📜">📜 ผู้บันทึกประวัติศาสตร์ตระกูล</option>
+                            <option value="🌟">🌟 บุคคลทรงเกียรติ</option>
+                            <option value="🕊️">🕊️ ล่วงลับสู่วิมุตติ</option>
+                            <option value="🎓">🎓 ปราชญ์ผู้ทรงคุณวุฒิ</option>
+                            <option value="⚔️">⚔️ วีรบุรุษนักสู้</option>
+                            <option value="🧬">🧬 สืบสายเลือดหลัก</option>
+                            <option value="💍">💍 สมรสสัมพันธ์</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">สัญลักษณ์ประจำตัว / ตราประทับ</label>
-                    <select id="badgeSymbol" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
-                        <option value="">-- ไม่มี --</option>
-                        <option value="👑">👑 ผู้นำตระกูล / ต้นตระกูล</option>
-                        <option value="🌟">🌟 คนสำคัญ</option>
-                        <option value="⚔️">⚔️ ทหาร / ตำรวจ</option>
-                        <option value="🧬">🧬 สืบสายเลือดตรง</option>
-                        <option value="🕊️">🕊️ ล่วงลับ</option>
-                        <option value="💍">💍 สมรสแล้ว</option>
-                        <option value="🎓">🎓 ผู้ทรงคุณวุฒิ</option>
-                        <option value="❤️">❤️ บุตรอันเป็นที่รัก</option>
-                    </select>
-                </div>
-
-                <div class="p-3 bg-slate-50 rounded-xl space-y-3 border border-slate-100">
+                <!-- Birth & Death Details -->
+                <div class="p-3.5 bg-[#f4ece1] rounded-xl space-y-3 border border-amber-900/15">
                     <div class="flex items-center justify-between">
-                        <label class="text-xs font-semibold text-slate-600">สถานะชีวิต</label>
+                        <label class="text-xs font-bold text-amber-950">สถานะชีวิต</label>
                         <div class="flex items-center gap-4 text-xs">
                             <label class="inline-flex items-center gap-1 cursor-pointer">
                                 <input type="radio" name="isAlive" value="true" checked onchange="toggleDeathDateInput()">
-                                <span>ยังมีชีวิตอยู่</span>
+                                <span class="text-emerald-900 font-medium">ยังมีชีวิตอยู่</span>
                             </label>
                             <label class="inline-flex items-center gap-1 cursor-pointer">
                                 <input type="radio" name="isAlive" value="false" onchange="toggleDeathDateInput()">
-                                <span class="text-slate-500">เสียชีวิตแล้ว</span>
+                                <span class="text-amber-900/80">ถึงแก่กรรม / เสียชีวิต</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3 pt-1">
                         <div>
-                            <label class="block text-[11px] font-medium text-slate-500 mb-1">วัน/เดือน/ปีเกิด</label>
-                            <input type="date" id="birthDate" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+                            <label class="block text-[11px] font-medium text-amber-900 mb-1">วัน/เดือน/ปีเกิด</label>
+                            <input type="date" id="birthDate" class="w-full px-2.5 py-1.5 text-xs bg-white border border-amber-900/20 rounded-lg">
                         </div>
-                        <div id="deathDateContainer" class="opacity-50 pointer-events-none">
-                            <label class="block text-[11px] font-medium text-slate-500 mb-1">วันที่เสียชีวิต</label>
-                            <input type="date" id="deathDate" class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg bg-white">
+                        <div>
+                            <label class="block text-[11px] font-medium text-amber-900 mb-1">สถานที่เกิด</label>
+                            <input type="text" id="birthPlace" placeholder="จังหวัด / เมือง" class="w-full px-2.5 py-1.5 text-xs bg-white border border-amber-900/20 rounded-lg">
+                        </div>
+                    </div>
+
+                    <div id="deathDateContainer" class="grid grid-cols-2 gap-3 pt-1 opacity-50 pointer-events-none">
+                        <div>
+                            <label class="block text-[11px] font-medium text-amber-900 mb-1">วันที่เสียชีวิต</label>
+                            <input type="date" id="deathDate" class="w-full px-2.5 py-1.5 text-xs bg-white border border-amber-900/20 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-amber-900 mb-1">สถานที่เสียชีวิต / สุสาน</label>
+                            <input type="text" id="deathPlace" placeholder="ฌาปนสถาน / สุสาน" class="w-full px-2.5 py-1.5 text-xs bg-white border border-amber-900/20 rounded-lg">
                         </div>
                     </div>
                 </div>
 
+                <!-- Contact & Profession -->
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">เบอร์โทรศัพท์</label>
-                        <input type="tel" id="phone" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg">
+                        <label class="block text-xs font-semibold text-amber-900 mb-1">อาชีพ / ตำแหน่งงาน</label>
+                        <input type="text" id="profession" placeholder="เช่น ข้าราชการ, ค้าขาย" class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">ที่อยู่ปัจจุบัน</label>
-                        <input type="text" id="address" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg">
+                        <label class="block text-xs font-semibold text-amber-900 mb-1">เบอร์โทรศัพท์</label>
+                        <input type="tel" id="phone" class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">ประวัติสังเขป / หมายเหตุ</label>
-                    <textarea id="bio" rows="2" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg"></textarea>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">ที่อยู่ปัจจุบัน / ภูมิลำเนาเดิม</label>
+                    <input type="text" id="address" class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">ประวัติสังเขป / เรื่องราวประจำตัว (Family Biography)</label>
+                    <textarea id="bio" rows="3" placeholder="บันทึกเรื่องราว ความทรงจำ หรือเกียรติประวัติของญาติท่านนี้..." class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg"></textarea>
                 </div>
             </form>
 
-            <div class="px-6 py-3 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-200/60 rounded-lg">ยกเลิก</button>
-                <button type="button" onclick="saveMemberForm()" class="px-5 py-2 text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm">บันทึกข้อมูล</button>
+            <div class="px-6 py-3.5 border-t border-amber-900/15 bg-[#f4ece1] flex justify-end gap-2">
+                <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm text-amber-900 hover:bg-amber-200/60 rounded-lg">ยกเลิก</button>
+                <button type="button" onclick="saveMemberForm()" class="px-5 py-2 text-sm font-medium bg-amber-800 hover:bg-amber-900 text-amber-50 rounded-lg shadow-md">บันทึกข้อมูลสมาชิก</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notifications -->
-    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+    <!-- AUTHENTICATION MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-[#fcf9f2] rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-fade-in border border-amber-900/30">
+            <div class="flex border-b border-amber-900/15 bg-[#f4ece1]">
+                <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-3 text-sm font-semibold text-amber-900 border-b-2 border-amber-800 bg-[#fcf9f2]">เข้าสู่ระบบ</button>
+                <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-3 text-sm font-semibold text-amber-800/60 hover:text-amber-950">ลงทะเบียน</button>
+            </div>
 
-    <!-- FIREBASE & APPLICATION LOGIC -->
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleEmailLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">อีเมล</label>
+                    <input type="email" id="loginEmail" required class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">รหัสผ่าน</label>
+                    <input type="password" id="loginPassword" required class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-amber-800 hover:bg-amber-900 text-amber-50 text-sm font-medium rounded-lg shadow-md transition">เข้าสู่ระบบ</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" onsubmit="handleEmailRegister(event)" class="p-6 space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">ชื่อผู้ใช้งาน / ชื่อตระกูล</label>
+                    <input type="text" id="regDisplayName" required class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">อีเมล</label>
+                    <input type="email" id="regEmail" required class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-amber-900 mb-1">รหัสผ่าน (ขั้นต่ำ 6 ตัวอักษร)</label>
+                    <input type="password" id="regPassword" required minlength="6" class="w-full px-3 py-2 text-sm bg-white border border-amber-900/20 rounded-lg">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-amber-800 hover:bg-amber-900 text-amber-50 text-sm font-medium rounded-lg shadow-md transition">สมัครสมาชิก</button>
+            </form>
+
+            <div class="px-6 pb-6 pt-0 space-y-3">
+                <div class="relative flex py-1 items-center">
+                    <div class="flex-grow border-t border-amber-900/15"></div>
+                    <span class="flex-shrink mx-3 text-xs text-amber-800/60">หรือ</span>
+                    <div class="flex-grow border-t border-amber-900/15"></div>
+                </div>
+                <button onclick="handleGoogleSignIn()" class="w-full py-2 bg-white hover:bg-amber-50 text-amber-950 border border-amber-900/20 rounded-lg text-sm font-medium flex items-center justify-center gap-2 shadow-sm">
+                    <i class="fa-brands fa-google text-rose-600"></i> เข้าสู่ระบบด้วย Google
+                </button>
+                <button onclick="handleAnonymousSignIn()" class="w-full py-2 bg-amber-100/50 hover:bg-amber-200/50 text-amber-900 rounded-lg text-xs font-medium">
+                    ทดลองใช้งานแบบไม่เข้าสู่ระบบ (Guest Mode)
+                </button>
+                <div class="text-center pt-2">
+                    <button type="button" onclick="closeAuthModal()" class="text-xs text-amber-800 hover:underline">ปิดหน้าต่างนี้</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="fixed bottom-6 left-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Firebase SDK Modules -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
             getAuth, 
-            signInAnonymously, 
-            signInWithCustomToken, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            signInAnonymously,
+            signOut, 
             onAuthStateChanged,
-            createUserWithEmailAndPassword,
-            signInWithEmailAndPassword,
-            GoogleAuthProvider,
-            signInWithPopup,
-            signOut,
             updateProfile
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { 
             getFirestore, 
             doc, 
-            getDoc, 
             setDoc, 
-            onSnapshot,
-            collection 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+            onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Global Firebase Setup - นำรหัสจาก Firebase Console ของคุณมาใส่เรียบร้อยแล้ว
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'family-tree-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "AIzaSyAAIN0X4jLRJug1qccJA50cYE LmnSFhWag",
+        // FIREBASE CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAIN0X4jLRJug1qccJA50cYELmnSFhWag",
             authDomain: "family-tree01.firebaseapp.com",
             projectId: "family-tree01",
             storageBucket: "family-tree01.firebasestorage.app",
@@ -479,49 +483,134 @@
             measurementId: "G-9LFJN9NRL8"
         };
 
-        // Check if config has valid key
-        if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("ใส่_API_KEY")) {
-            console.warn("ยังไม่ได้ตั้งค่า Firebase API Key จริง");
-        }
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const appId = "family-tree-app";
 
-        // Application State
+        // Global State Variables
         let currentUser = null;
         let familyData = [];
-        let base64PhotoTemp = "";
         let unsubscribeFirestore = null;
-
-        // Custom Link / Connection Mode State
+        let base64PhotoTemp = "";
         let isConnectMode = false;
         let selectedFirstMemberId = null;
 
-        // Canvas State
-        let zoomScale = 1;
+        // Default Data parsed directly from XEEM LIS Family Tree Chart image
+        const defaultXeemLisTree = [
+            // Generation 1
+            { id: "gen1_1", firstName: "เสี้ยนฮ้ง", lastName: "ลีส์", isAlive: false, badgeSymbol: "👑", parentIds: [], spouseIds: [], childrenIds: ["gen2_1"] },
+            
+            // Generation 2
+            { id: "gen2_1", firstName: "เจี่ยะก๋อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen1_1"], spouseIds: [], childrenIds: ["gen3_1", "gen3_2"] },
+
+            // Generation 3
+            { id: "gen3_1", firstName: "ยี่นา", lastName: "ลีส์", isAlive: false, parentIds: ["gen2_1"], spouseIds: [], childrenIds: ["gen4_1", "gen4_2"] },
+            { id: "gen3_2", firstName: "โย้งฮั่ว", lastName: "ลีส์", isAlive: false, parentIds: ["gen2_1"], spouseIds: [], childrenIds: ["gen4_3", "gen4_4", "gen4_5", "gen4_6"] },
+
+            // Generation 4 (Children of ยี่นา)
+            { id: "gen4_1", firstName: "หวุนา", lastName: "ลีส์", isAlive: false, parentIds: ["gen3_1"], spouseIds: [], childrenIds: ["gen5_1"] },
+            { id: "gen4_2", firstName: "ไทเจอะ", lastName: "ลีส์", isAlive: false, parentIds: ["gen3_1"], spouseIds: [], childrenIds: ["gen5_2", "gen5_3", "gen5_4"] },
+
+            // Generation 4 (Children of โย้งฮั่ว)
+            { id: "gen4_3", firstName: "ชะ", lastName: "ลีส์", isAlive: false, parentIds: ["gen3_2"], spouseIds: [], childrenIds: ["gen5_5", "gen5_6"] },
+            { id: "gen4_4", firstName: "เจี่ยะเวียอ", lastName: "ลีส์", isAlive: false, parentIds: ["gen3_2"], spouseIds: [], childrenIds: ["gen5_7", "gen5_8"] },
+            { id: "gen4_5", firstName: "เพียเยอะ", lastName: "ลีส์", isAlive: false, parentIds: ["gen3_2"], spouseIds: [], childrenIds: ["gen5_9", "gen5_10"] },
+            { id: "gen4_6", firstName: "ไผ่เอ๋อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen3_2"], spouseIds: [], childrenIds: ["gen5_11"] },
+
+            // Generation 5
+            { id: "gen5_1", firstName: "พ้อง", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_1"], spouseIds: [], childrenIds: ["gen6_1", "gen6_2", "gen6_3", "gen6_4", "gen6_5", "gen6_6", "gen6_7"] },
+            { id: "gen5_2", firstName: "จะป๊อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_2"], spouseIds: [], childrenIds: [] },
+            { id: "gen5_3", firstName: "ตา", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_2"], spouseIds: ["gen5_3_s"], childrenIds: ["gen6_8", "gen6_9", "gen6_10", "gen6_11", "gen6_12", "gen6_13", "gen6_14", "gen6_15"] },
+            { id: "gen5_3_s", firstName: "จู้ดเฮ่อ", lastName: "", isAlive: false, parentIds: [], spouseIds: ["gen5_3"], childrenIds: [] },
+            { id: "gen5_4", firstName: "สั่วไม", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_2"], spouseIds: [], childrenIds: [] },
+            { id: "gen5_5", firstName: "หนี่ซ่ง", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_3"], spouseIds: [], childrenIds: [] },
+            { id: "gen5_6", firstName: "เฮ้อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_3"], spouseIds: [], childrenIds: [] },
+            { id: "gen5_7", firstName: "โย้งก๋อย", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_4"], spouseIds: [], childrenIds: ["gen6_16", "gen6_17", "gen6_18", "gen6_19", "gen6_20", "gen6_21", "gen6_22"] },
+            { id: "gen5_8", firstName: "กู", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_4"], spouseIds: ["gen5_8_s"], childrenIds: ["gen6_23", "gen6_24", "gen6_25", "gen6_26", "gen6_27", "gen6_28", "gen6_29"] },
+            { id: "gen5_8_s", firstName: "แสงสั้วเล่า", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen5_8"], childrenIds: [] },
+            { id: "gen5_9", firstName: "จู้ป๋อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_5"], spouseIds: [], childrenIds: [] },
+            { id: "gen5_10", firstName: "เอ้งกะ", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_5"], spouseIds: [], childrenIds: [] },
+            { id: "gen5_11", firstName: "ช่วนจ๋ง", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_6"], spouseIds: [], childrenIds: ["gen6_30", "gen6_31", "gen6_32", "gen6_33"] },
+            { id: "gen5_12", firstName: "จูเต๋อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen4_6"], spouseIds: [], childrenIds: [] },
+            { id: "gen5_13", firstName: "โรงคือ", lastName: "ลีส์", isAlive: true, parentIds: ["gen4_6"], spouseIds: [], childrenIds: [] },
+
+            // Generation 6 (Branch: พ้อง)
+            { id: "gen6_1", firstName: "เรียน", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_1"], spouseIds: ["gen6_1_s"], childrenIds: [] },
+            { id: "gen6_1_s", firstName: "สั้วเสื่อเก้า", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_1"], childrenIds: [] },
+            { id: "gen6_2", firstName: "จ๋องจ๊อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_1"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_3", firstName: "โลงมัว", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_1"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_4", firstName: "เซน", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_1"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_5", firstName: "เซเนะฮั้ว", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_1"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_6", firstName: "ตาเฮ่อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_1"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_7", firstName: "สี่ว๋อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_1"], spouseIds: [], childrenIds: [] },
+
+            // Generation 6 (Branch: ตา + จู้ดเฮ่อ)
+            { id: "gen6_8", firstName: "โรงส", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_3"], spouseIds: ["gen6_8_s"], childrenIds: [] },
+            { id: "gen6_8_s", firstName: "สั้วม้งหว้า", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_8"], childrenIds: [] },
+            { id: "gen6_9", firstName: "จ๋งม้ง", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_3"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_10", firstName: "โหนเฮ่อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_3"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_11", firstName: "มอซ่ง", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_3"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_12", firstName: "หวายยึ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_3"], spouseIds: ["gen6_12_s"], childrenIds: [] },
+            { id: "gen6_12_s", firstName: "เกียซ่ง", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_12"], childrenIds: [] },
+            { id: "gen6_13", firstName: "จำก๋วน", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_3"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_14", firstName: "เอ๋ยะเส่า", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_3"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_15", firstName: "ท่อหว้า", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_3"], spouseIds: [], childrenIds: [] },
+
+            // Generation 6 (Branch: โย้งก๋อย)
+            { id: "gen6_16", firstName: "เซี๋ยะ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_7"], spouseIds: ["gen6_16_s"], childrenIds: [] },
+            { id: "gen6_16_s", firstName: "หย่าไก่หว้า", lastName: "", isAlive: false, parentIds: [], spouseIds: ["gen6_16"], childrenIds: [] },
+            { id: "gen6_17", firstName: "เกี๊ยะ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_7"], spouseIds: ["gen6_17_s"], childrenIds: [] },
+            { id: "gen6_17_s", firstName: "จ๋งฮ่อหว้า", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_17"], childrenIds: [] },
+            { id: "gen6_18", firstName: "เจี่ยะแย้ง", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_7"], spouseIds: ["gen6_18_s"], childrenIds: [] },
+            { id: "gen6_18_s", firstName: "ไซเต่า", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_18"], childrenIds: [] },
+            { id: "gen6_19", firstName: "มะนิด", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_7"], spouseIds: ["gen6_19_s"], childrenIds: [] },
+            { id: "gen6_19_s", firstName: "ต๋องจู๋เต่า", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_19"], childrenIds: [] },
+            { id: "gen6_20", firstName: "ก๋วย", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_7"], spouseIds: ["gen6_20_s"], childrenIds: [] },
+            { id: "gen6_20_s", firstName: "กู้ท่อ", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_20"], childrenIds: [] },
+            { id: "gen6_21", firstName: "เพ็ง", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_7"], spouseIds: ["gen6_21_s"], childrenIds: [] },
+            { id: "gen6_21_s", firstName: "ยิงม้งหว้า", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_21"], childrenIds: [] },
+            { id: "gen6_22", firstName: "ไหม", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_7"], spouseIds: ["gen6_22_s"], childrenIds: [] },
+            { id: "gen6_22_s", firstName: "หว่้าย๋อเก่า", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_22"], childrenIds: [] },
+
+            // Generation 6 (Branch: กู + แสงสั้วเล่า)
+            { id: "gen6_23", firstName: "จิ๋ว", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_8"], spouseIds: ["gen6_23_s"], childrenIds: [] },
+            { id: "gen6_23_s", firstName: "โหย๋อป๋อเฮ่อ", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_23"], childrenIds: [] },
+            { id: "gen6_24", firstName: "จิ๋ว", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_8"], spouseIds: ["gen6_24_s"], childrenIds: [] },
+            { id: "gen6_24_s", firstName: "ก๋าวจั๊วฮ่อ", lastName: "", isAlive: false, parentIds: [], spouseIds: ["gen6_24"], childrenIds: [] },
+            { id: "gen6_25", firstName: "เยีย", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_8"], spouseIds: ["gen6_25_s"], childrenIds: [] },
+            { id: "gen6_25_s", firstName: "เสาเก๊อ", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_25"], childrenIds: [] },
+            { id: "gen6_26", firstName: "ตั๋ว", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_8"], spouseIds: ["gen6_26_s"], childrenIds: [] },
+            { id: "gen6_26_s", firstName: "ชั่วพะเยอะเฮ่อ", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_26"], childrenIds: [] },
+            { id: "gen6_27", firstName: "งูยเซี่ย", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_8"], spouseIds: ["gen6_27_s"], childrenIds: [] },
+            { id: "gen6_27_s", firstName: "เสียะมั่ว", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_27"], childrenIds: [] },
+            { id: "gen6_28", firstName: "เอ๋วะกั๋ว", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_8"], spouseIds: ["gen6_28_s"], childrenIds: [] },
+            { id: "gen6_28_s", firstName: "ฮี่เฮ่อ", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_28"], childrenIds: [] },
+            { id: "gen6_29", firstName: "เดียะ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_8"], spouseIds: ["gen6_29_s"], childrenIds: [] },
+            { id: "gen6_29_s", firstName: "ชั่วแต่งมั่ว", lastName: "", isAlive: true, parentIds: [], spouseIds: ["gen6_29"], childrenIds: [] },
+
+            // Generation 6 (Branch: ช่วนจ๋ง)
+            { id: "gen6_30", firstName: "หวะยือ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_11"], spouseIds: ["gen6_30_s"], childrenIds: [] },
+            { id: "gen6_30_s", firstName: "ตั๋วจ๋าก", lastName: "", isAlive: false, parentIds: [], spouseIds: ["gen6_30"], childrenIds: [] },
+            { id: "gen6_31", firstName: "วะเส่อ", lastName: "ลีส์", isAlive: true, parentIds: ["gen5_11"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_32", firstName: "หนอมเซ่ง", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_11"], spouseIds: [], childrenIds: [] },
+            { id: "gen6_33", firstName: "เมียเส่อ", lastName: "ลีส์", isAlive: false, parentIds: ["gen5_11"], spouseIds: ["gen6_33_s"], childrenIds: [] },
+            { id: "gen6_33_s", firstName: "เอ๋ยะท่อ", lastName: "", isAlive: false, parentIds: [], spouseIds: ["gen6_33"], childrenIds: [] }
+        ];
+
+        // Canvas Viewport Transformation
+        let scale = 1;
         let panX = 0;
         let panY = 0;
-        let isDraggingCanvas = false;
-        let startDragX = 0, startDragY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
 
-        /* ==========================================================================
-           AUTHENTICATION & FIRESTORE REALTIME SYNC
-           ========================================================================== */
-
-        window.addEventListener('DOMContentLoaded', async () => {
+        // Initialize App
+        window.addEventListener("DOMContentLoaded", () => {
             setupPanAndZoom();
             setupSearch();
-
-            // Initial Auth Check
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                try {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } catch (e) {
-                    await signInAnonymously(auth);
-                }
-            }
-
+            
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
                 updateAuthUI(user);
@@ -529,281 +618,75 @@
                     subscribeToFamilyTreeData(user.uid);
                 } else {
                     if (unsubscribeFirestore) unsubscribeFirestore();
-                    familyData = [];
+                    // Load local storage if guest, fallback to Default Xeem Lis Tree
+                    const local = localStorage.getItem("family_tree_local_data");
+                    familyData = local ? JSON.parse(local) : defaultXeemLisTree;
                     renderTree();
+                    updateSyncStatus('offline', 'ใช้งานแบบ Off-line (ผัง XEEM LIS)');
                 }
             });
         });
 
         /* ==========================================================================
-           PAN & ZOOM CANVAS LOGIC
+           PAN & ZOOM CANVAS SYSTEM
            ========================================================================== */
-
         function setupPanAndZoom() {
             const container = document.getElementById("canvasContainer");
             const viewport = document.getElementById("treeViewport");
 
             container.addEventListener("mousedown", (e) => {
                 if (e.target.closest(".member-card") || e.target.closest("button")) return;
-                isDraggingCanvas = true;
-                startDragX = e.clientX - panX;
-                startDragY = e.clientY - panY;
-                container.style.cursor = "grabbing";
+                isDragging = true;
+                startX = e.clientX - panX;
+                startY = e.clientY - panY;
             });
 
             window.addEventListener("mousemove", (e) => {
-                if (!isDraggingCanvas) return;
-                panX = e.clientX - startDragX;
-                panY = e.clientY - startDragY;
+                if (!isDragging) return;
+                panX = e.clientX - startX;
+                panY = e.clientY - startY;
                 applyTransform();
             });
 
-            window.addEventListener("mouseup", () => {
-                isDraggingCanvas = false;
-                container.style.cursor = "grab";
-            });
+            window.addEventListener("mouseup", () => isDragging = false);
 
             container.addEventListener("wheel", (e) => {
                 e.preventDefault();
-                const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
-                const newScale = Math.min(Math.max(0.3, zoomScale * zoomFactor), 2.5);
-                
-                zoomScale = newScale;
+                const zoomFactor = 0.08;
+                if (e.deltaY < 0) scale = Math.min(scale + zoomFactor, 2.5);
+                else scale = Math.max(scale - zoomFactor, 0.3);
                 applyTransform();
             }, { passive: false });
         }
 
         function applyTransform() {
             const viewport = document.getElementById("treeViewport");
-            const svg = document.getElementById("svgLines");
-            viewport.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomScale})`;
-            svg.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomScale})`;
-        }
-
-        window.zoomIn = () => {
-            zoomScale = Math.min(zoomScale * 1.2, 2.5);
-            applyTransform();
-        };
-
-        window.zoomOut = () => {
-            zoomScale = Math.max(zoomScale / 1.2, 0.3);
-            applyTransform();
-        };
-
-        window.resetZoomPan = () => {
-            zoomScale = 1;
-            panX = 0;
-            panY = 0;
-            applyTransform();
-        };
-
-        window.handleImageUpload = (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                base64PhotoTemp = e.target.result;
-                document.getElementById("photoPreview").src = base64PhotoTemp;
-            };
-            reader.readAsDataURL(file);
-        };
-
-        window.showAddRelativeOptions = (memberId) => {
-            const member = familyData.find(m => m.id === memberId);
-            if (!member) return;
-
-            const choice = prompt(
-                `เพิ่มความสัมพันธ์สำหรับ ${member.firstName}:\n` +
-                `[1] เพิ่ม พ่อ/แม่\n` +
-                `[2] เพิ่ม คู่สมรส\n` +
-                `[3] เพิ่ม ลูก\n\n` +
-                `พิมพ์ตัวเลข 1, 2 หรือ 3:`
-            );
-
-            if (choice === "1") openAddModal(memberId, "parent");
-            else if (choice === "2") openAddModal(memberId, "spouse");
-            else if (choice === "3") openAddModal(memberId, "child");
-        };
-
-        window.closeModal = () => document.getElementById("memberModal").classList.add("hidden");
-        window.closeAuthModal = () => document.getElementById("authModal").classList.add("hidden");
-        window.openAuthModal = (tab = 'login') => {
-            switchAuthTab(tab);
-            document.getElementById("authModal").classList.remove("hidden");
-        };
-
-        window.switchAuthTab = (tab) => {
-            const loginForm = document.getElementById("loginForm");
-            const regForm = document.getElementById("registerForm");
-            const tabLogin = document.getElementById("tabLoginBtn");
-            const tabReg = document.getElementById("tabRegisterBtn");
-
-            if (tab === 'login') {
-                loginForm.classList.remove("hidden");
-                regForm.classList.add("hidden");
-                tabLogin.className = "flex-1 py-3 text-sm font-semibold text-indigo-600 border-b-2 border-indigo-600 bg-white";
-                tabReg.className = "flex-1 py-3 text-sm font-semibold text-slate-500 hover:text-slate-700";
-            } else {
-                loginForm.classList.add("hidden");
-                regForm.classList.remove("hidden");
-                tabReg.className = "flex-1 py-3 text-sm font-semibold text-indigo-600 border-b-2 border-indigo-600 bg-white";
-                tabLogin.className = "flex-1 py-3 text-sm font-semibold text-slate-500 hover:text-slate-700";
-            }
-        };
-
-        // Firestore Listener Rule 1 & Rule 2 Compliant
-        function subscribeToFamilyTreeData(userId) {
-            updateSyncStatus('syncing', 'กำลังโหลดข้อมูล...');
-            const docRef = doc(db, 'artifacts', appId, 'users', userId, 'family_tree', 'main_tree');
-
-            if (unsubscribeFirestore) unsubscribeFirestore();
-
-            unsubscribeFirestore = onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    familyData = docSnap.data().members || [];
-                } else {
-                    familyData = [];
-                }
-                renderTree();
-                updateSyncStatus('online', 'ซิงค์ข้อมูล Cloud แล้ว');
-            }, (error) => {
-                console.error("Firestore Error:", error);
-                updateSyncStatus('error', 'ข้อผิดพลาดการเชื่อมต่อ');
-                showToast("ไม่สามารถโหลดข้อมูลจาก Cloud ได้", "error");
-            });
-        }
-
-        async function saveFamilyDataToCloud() {
-            if (!currentUser) {
-                showToast("กรุณาเข้าสู่ระบบเพื่อบันทึกข้อมูลลง Cloud", "info");
-                openAuthModal('login');
-                return;
-            }
-
-            updateSyncStatus('syncing', 'กำลังบันทึก...');
-            try {
-                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'family_tree', 'main_tree');
-                await setDoc(docRef, {
-                    members: familyData,
-                    updatedAt: new Date().toISOString()
-                }, { merge: true });
-                updateSyncStatus('online', 'บันทึกสำเร็จ');
-            } catch (err) {
-                console.error("Cloud Save Error:", err);
-                updateSyncStatus('error', 'บันทึกไม่สำเร็จ');
-                showToast("บันทึกข้อมูลไม่สำเร็จ", "error");
+            if (viewport) {
+                viewport.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
             }
         }
+
+        window.zoomIn = () => { scale = Math.min(scale + 0.15, 2.5); applyTransform(); };
+        window.zoomOut = () => { scale = Math.max(scale - 0.15, 0.3); applyTransform(); };
+        window.resetZoomPan = () => { scale = 1; panX = 0; panY = 0; applyTransform(); };
 
         /* ==========================================================================
-           AUTH HANDLERS
+           TREE LAYOUT & CONNECTIONS RENDERING
            ========================================================================== */
-
-        window.handleEmailLogin = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById("loginEmail").value;
-            const password = document.getElementById("loginPassword").value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                closeAuthModal();
-                showToast("เข้าสู่ระบบเรียบร้อยแล้ว", "success");
-            } catch (err) {
-                showToast("เข้าสู่ระบบไม่สำเร็จ: " + err.message, "error");
-            }
-        };
-
-        window.handleEmailRegister = async (e) => {
-            e.preventDefault();
-            const name = document.getElementById("regDisplayName").value;
-            const email = document.getElementById("regEmail").value;
-            const password = document.getElementById("regPassword").value;
-            try {
-                const res = await createUserWithEmailAndPassword(auth, email, password);
-                await updateProfile(res.user, { displayName: name });
-                closeAuthModal();
-                showToast("สมัครสมาชิกสำเร็จ!", "success");
-            } catch (err) {
-                showToast("ลงทะเบียนไม่สำเร็จ: " + err.message, "error");
-            }
-        };
-
-        window.handleGoogleSignIn = async () => {
-            try {
-                const provider = new GoogleAuthProvider();
-                await signInWithPopup(auth, provider);
-                closeAuthModal();
-                showToast("เข้าสู่ระบบด้วย Google เรียบร้อยแล้ว", "success");
-            } catch (err) {
-                showToast("การเข้าสู่ระบบผ่าน Google ขัดข้อง", "error");
-            }
-        };
-
-        window.handleAnonymousSignIn = async () => {
-            try {
-                await signInAnonymously(auth);
-                closeAuthModal();
-                showToast("เข้าสู่ระบบชั่วคราวในฐานะ Guest", "info");
-            } catch (err) {
-                showToast("เข้าใช้งานแบบ Guest ไม่สำเร็จ", "error");
-            }
-        };
-
-        window.handleSignOut = async () => {
-            await signOut(auth);
-            showToast("ออกจากระบบแล้ว", "info");
-        };
-
-        function updateAuthUI(user) {
-            const loginBtn = document.getElementById("loginModalBtn");
-            const userInfo = document.getElementById("userInfoDropdown");
-            const userName = document.getElementById("userDisplayName");
-
-            if (user && !user.isAnonymous) {
-                loginBtn.classList.add("hidden");
-                userInfo.classList.remove("hidden");
-                userName.textContent = user.displayName || user.email || "สมาชิก";
-            } else {
-                loginBtn.classList.remove("hidden");
-                userInfo.classList.add("hidden");
-            }
-        }
-
-        function updateSyncStatus(status, text) {
-            const syncStatus = document.getElementById("syncStatus");
-            const syncDot = document.getElementById("syncDot");
-            const syncText = document.getElementById("syncText");
-
-            if (!syncStatus || !syncDot || !syncText) return;
-
-            syncStatus.classList.remove("hidden");
-            syncText.textContent = text;
-
-            if (status === 'online') {
-                syncDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
-            } else if (status === 'syncing') {
-                syncDot.className = "w-2 h-2 rounded-full bg-amber-500 animate-spin";
-            } else {
-                syncDot.className = "w-2 h-2 rounded-full bg-rose-500";
-            }
-        }
-
-        /* ==========================================================================
-           TREE CANVAS RENDERING & LAYOUT
-           ========================================================================== */
-
         function renderTree() {
             const container = document.getElementById("treeNodesContainer");
             const svg = document.getElementById("svgLines");
+            if (!container || !svg) return;
+
             container.innerHTML = "";
             svg.innerHTML = "";
 
             if (familyData.length === 0) {
                 container.innerHTML = `
-                    <div class="p-8 text-center text-slate-400 bg-white/80 rounded-2xl border border-dashed border-slate-300 shadow-sm max-w-sm mx-auto my-12">
-                        <i class="fa-solid fa-users text-4xl mb-2 text-slate-300"></i>
-                        <p class="font-medium text-slate-600">ยังไม่มีข้อมูลในผังตระกูล</p>
-                        <p class="text-xs mt-1">คลิกปุ่ม "เพิ่มต้นตระกูล" เพื่อเริ่มสร้างแผนผัง</p>
+                    <div class="p-8 text-center text-amber-800/60 bg-[#fcf9f2]/90 rounded-2xl border border-dashed border-amber-900/20 shadow-sm max-w-sm mx-auto my-20">
+                        <i class="fa-solid fa-users-viewfinder text-5xl mb-3 text-amber-800/40"></i>
+                        <p class="font-bold text-amber-950 font-vintage text-lg">ยังไม่มีข้อมูลในผังตระกูล</p>
+                        <p class="text-xs mt-1 text-amber-800">คลิกปุ่ม "เพิ่มต้นตระกูล" เพื่อเริ่มสร้างสายเลือดแห่งตระกูล</p>
                     </div>
                 `;
                 return;
@@ -822,8 +705,8 @@
 
         function calculateLayoutPositions() {
             const positions = {};
-            const CARD_WIDTH = 200, CARD_HEIGHT = 120;
-            const GAP_X = 60, GAP_Y = 100;
+            const CARD_WIDTH = 210, CARD_HEIGHT = 130;
+            const GAP_X = 50, GAP_Y = 110;
 
             const roots = familyData.filter(m => (!m.parentIds || m.parentIds.length === 0));
             const levels = {};
@@ -867,35 +750,46 @@
         function createMemberCardElement(member, pos) {
             const div = document.createElement("div");
             const isSelected = selectedFirstMemberId === member.id;
-            div.className = `member-card absolute bg-white rounded-2xl shadow-md border-2 p-3 w-[200px] cursor-pointer z-10 ${
-                member.gender === 'male' ? 'border-blue-400' : 'border-pink-400'
-            } ${!member.isAlive ? 'opacity-80 bg-slate-50' : ''} ${
-                isSelected ? 'ring-4 ring-indigo-500 border-indigo-600 shadow-xl' : ''
+            
+            div.className = `member-card absolute bg-[#fffdfa] rounded-2xl shadow-md border-2 p-3 w-[210px] cursor-pointer z-10 ${
+                member.gender === 'male' ? 'border-sky-700/80' : 'border-rose-700/80'
+            } ${!member.isAlive ? 'opacity-85 bg-stone-100/90' : ''} ${
+                isSelected ? 'ring-4 ring-amber-600 border-amber-800 shadow-xl scale-105' : ''
             }`;
             
             div.style.left = `${pos.x}px`;
             div.style.top = `${pos.y}px`;
             div.dataset.id = member.id;
 
-            const badgeSymbol = member.badgeSymbol ? `<span class="absolute -top-2 -right-2 bg-white rounded-full shadow border px-1 text-xs" title="สัญลักษณ์ประจำตัว">${member.badgeSymbol}</span>` : '';
+            const badgeSymbol = member.badgeSymbol ? `<span class="absolute -top-2 -right-2 bg-amber-100 rounded-full shadow border border-amber-300 px-1.5 py-0.5 text-xs" title="สัญลักษณ์ประจำตัว">${member.badgeSymbol}</span>` : '';
+            const aliveTag = !member.isAlive ? `<span class="text-[9px] bg-stone-200 text-stone-700 px-1 py-0.2 rounded ml-1">ล่วงลับ</span>` : '';
 
             div.innerHTML = `
                 ${badgeSymbol}
                 <div class="flex items-center gap-2.5">
-                    <img src="${member.photo || 'https://placehold.co/100x100/e2e8f0/64748b?text=%E0%B8%A3%E0%B8%B9%E0%B8%9B'}" 
-                         class="w-12 h-12 rounded-full object-cover border border-slate-200 shadow-sm">
+                    <img src="${member.photo || 'https://placehold.co/100x100/f3e8ff/78350f?text=รูป'}" 
+                         class="w-12 h-12 rounded-full object-cover border border-amber-900/20 shadow-sm">
                     <div class="overflow-hidden flex-1">
-                        <h4 class="font-bold text-slate-800 text-sm truncate leading-snug">${member.firstName}</h4>
-                        <p class="text-xs text-slate-500 truncate">${member.lastName || ''}</p>
-                        ${member.nickname ? `<span class="inline-block text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded-md mt-0.5">(${member.nickname})</span>` : ''}
+                        <h4 class="font-bold text-amber-950 text-sm truncate leading-snug font-vintage">${member.firstName} ${aliveTag}</h4>
+                        <p class="text-xs text-amber-900/70 truncate">${member.lastName || ''}</p>
+                        ${member.maidenName ? `<p class="text-[10px] text-amber-800/60 truncate">นามสกุลเดิม: ${member.maidenName}</p>` : ''}
+                        ${member.nickname ? `<span class="inline-block text-[10px] bg-amber-100/80 text-amber-900 px-1.5 py-0.2 rounded-md mt-0.5">(${member.nickname})</span>` : ''}
                     </div>
                 </div>
-                <div class="flex justify-center gap-1 mt-2 pt-2 border-t border-slate-100">
-                    <button onclick="event.stopPropagation(); window.openEditModal('${member.id}')" title="แก้ไขข้อมูล" class="text-xs text-indigo-600 hover:bg-indigo-50 px-2 py-1 rounded transition">
-                        <i class="fa-solid fa-pen-to-square"></i> แก้ไข
+                
+                <!-- Family Echo Quick Add Relations Buttons -->
+                <div class="grid grid-cols-4 gap-1 mt-2.5 pt-2 border-t border-amber-900/10 text-[10px] text-center font-semibold text-amber-900">
+                    <button onclick="event.stopPropagation(); window.openAddModal('${member.id}', 'parent')" title="เพิ่ม พ่อ/แม่" class="bg-amber-100/60 hover:bg-amber-200/80 py-1 rounded transition">
+                        +พ่อแม่
                     </button>
-                    <button onclick="event.stopPropagation(); window.showAddRelativeOptions('${member.id}')" title="เพิ่มสายสัมพันธ์" class="text-xs text-emerald-600 hover:bg-emerald-50 px-2 py-1 rounded transition">
-                        <i class="fa-solid fa-plus"></i> เพิ่มญาติ
+                    <button onclick="event.stopPropagation(); window.openAddModal('${member.id}', 'spouse')" title="เพิ่ม คู่สมรส" class="bg-rose-100/60 hover:bg-rose-200/80 py-1 rounded transition text-rose-900">
+                        +คู่สมรส
+                    </button>
+                    <button onclick="event.stopPropagation(); window.openAddModal('${member.id}', 'child')" title="เพิ่ม ลูก" class="bg-emerald-100/60 hover:bg-emerald-200/80 py-1 rounded transition text-emerald-900">
+                        +ลูก
+                    </button>
+                    <button onclick="event.stopPropagation(); window.openAddModal('${member.id}', 'sibling')" title="เพิ่ม พี่น้อง" class="bg-sky-100/60 hover:bg-sky-200/80 py-1 rounded transition text-sky-900">
+                        +พี่น้อง
                     </button>
                 </div>
             `;
@@ -912,7 +806,7 @@
 
         function drawConnections(positions) {
             const svg = document.getElementById("svgLines");
-            const CARD_WIDTH = 200, CARD_HEIGHT = 100;
+            const CARD_WIDTH = 210, CARD_HEIGHT = 130;
 
             familyData.forEach(member => {
                 const parentPos = positions[member.id];
@@ -954,9 +848,251 @@
         }
 
         /* ==========================================================================
-           CUSTOM RELATIONSHIP CONNECTOR TOOL
+           MEMBER DETAILS DRAWER & CRUD MODAL
            ========================================================================== */
+        function openDetailDrawer(memberId) {
+            const member = familyData.find(m => m.id === memberId);
+            if (!member) return;
 
+            const parents = (member.parentIds || []).map(id => familyData.find(m => m.id === id)).filter(Boolean);
+            const spouses = (member.spouseIds || []).map(id => familyData.find(m => m.id === id)).filter(Boolean);
+            const children = (member.childrenIds || []).map(id => familyData.find(m => m.id === id)).filter(Boolean);
+
+            document.getElementById("drawerBody").innerHTML = `
+                <div class="text-center pb-4 border-b border-amber-900/15">
+                    <img src="${member.photo || 'https://placehold.co/120x120/f3e8ff/78350f?text=รูปถ่าย'}" class="w-20 h-20 rounded-full object-cover mx-auto mb-2 shadow-md border-2 border-amber-200">
+                    <h2 class="text-lg font-bold text-amber-950 font-vintage">${member.badgeSymbol || ''} ${member.firstName} ${member.lastName || ''}</h2>
+                    ${member.maidenName ? `<p class="text-xs text-amber-800/70">(นามสกุลเดิม: ${member.maidenName})</p>` : ''}
+                    ${member.nickname ? `<span class="inline-block text-xs text-amber-900 bg-amber-100 px-2 py-0.5 rounded-full mt-1">ชื่อเล่น: ${member.nickname}</span>` : ''}
+                </div>
+
+                <div class="bg-[#f4ece1] p-3.5 rounded-xl border border-amber-900/15 space-y-2 text-xs text-amber-950">
+                    <div class="font-bold text-amber-900 border-b border-amber-900/10 pb-1 flex items-center justify-between">
+                        <span><i class="fa-solid fa-users-line"></i> ผูกสัมพันธ์ครอบครัว</span>
+                    </div>
+                    <p><strong>บิดา/มารดา:</strong> ${parents.length ? parents.map(p => p.firstName).join(', ') : '-'}</p>
+                    <p><strong>คู่สมรส:</strong> ${spouses.length ? spouses.map(s => s.firstName).join(', ') : '-'}</p>
+                    <p><strong>บุตร/ธิดา:</strong> ${children.length ? children.map(c => c.firstName).join(', ') : '-'}</p>
+                </div>
+
+                <div class="space-y-2.5 text-xs text-amber-950">
+                    <p><strong class="text-amber-900">สถานะชีวิต:</strong> ${member.isAlive ? 'ยังมีชีวิตอยู่' : 'ถึงแก่กรรม/เสียชีวิต'}</p>
+                    <p><strong class="text-amber-900">วันเกิด:</strong> ${member.birthDate || '-'} ${member.birthPlace ? `(${member.birthPlace})` : ''}</p>
+                    ${!member.isAlive ? `<p><strong class="text-amber-900">วันที่เสียชีวิต:</strong> ${member.deathDate || '-'} ${member.deathPlace ? `(${member.deathPlace})` : ''}</p>` : ''}
+                    <p><strong class="text-amber-900">อาชีพ:</strong> ${member.profession || '-'}</p>
+                    <p><strong class="text-amber-900">เบอร์โทรศัพท์:</strong> ${member.phone || '-'}</p>
+                    <p><strong class="text-amber-900">ที่อยู่:</strong> ${member.address || '-'}</p>
+                    <div class="pt-1">
+                        <strong class="text-amber-900 block mb-1">ประวัติสังเขป / เรื่องราวประจำตัว:</strong>
+                        <p class="bg-white p-2.5 rounded-lg border border-amber-900/15 text-slate-700 whitespace-pre-line">${member.bio || 'ยังไม่มีการบันทึกประวัติ'}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("drawerEditBtn").onclick = () => {
+                closeDetailDrawer();
+                openEditModal(memberId);
+            };
+
+            document.getElementById("drawerDeleteBtn").onclick = async () => {
+                if (confirm(`คุณต้องการลบข้อมูลของ ${member.firstName} ออกจากผังตระกูลใช่หรือไม่?`)) {
+                    familyData = familyData.filter(m => m.id !== memberId);
+                    familyData.forEach(m => {
+                        m.childrenIds = (m.childrenIds || []).filter(id => id !== memberId);
+                        m.spouseIds = (m.spouseIds || []).filter(id => id !== memberId);
+                        m.parentIds = (m.parentIds || []).filter(id => id !== memberId);
+                    });
+                    closeDetailDrawer();
+                    renderTree();
+                    await saveFamilyDataToCloud();
+                }
+            };
+
+            document.getElementById("detailDrawer").classList.remove("translate-x-full");
+        }
+
+        window.closeDetailDrawer = () => document.getElementById("detailDrawer").classList.add("translate-x-full");
+
+        window.openEditModal = (memberId) => {
+            const member = familyData.find(m => m.id === memberId);
+            if (!member) return;
+
+            document.getElementById("modalTitle").textContent = "แก้ไขข้อมูลสมาชิก";
+            document.getElementById("memberId").value = member.id;
+            document.getElementById("relTargetId").value = "";
+            document.getElementById("relType").value = "";
+            document.getElementById("firstName").value = member.firstName || "";
+            document.getElementById("lastName").value = member.lastName || "";
+            document.getElementById("maidenName").value = member.maidenName || "";
+            document.getElementById("nickname").value = member.nickname || "";
+            document.getElementById("gender").value = member.gender || "male";
+            document.getElementById("badgeSymbol").value = member.badgeSymbol || "";
+            document.getElementById("birthDate").value = member.birthDate || "";
+            document.getElementById("birthPlace").value = member.birthPlace || "";
+            document.getElementById("deathDate").value = member.deathDate || "";
+            document.getElementById("deathPlace").value = member.deathPlace || "";
+            document.getElementById("profession").value = member.profession || "";
+            document.getElementById("phone").value = member.phone || "";
+            document.getElementById("address").value = member.address || "";
+            document.getElementById("bio").value = member.bio || "";
+            document.getElementById("photoPreview").src = member.photo || "https://placehold.co/120x120/f3e8ff/78350f?text=รูปถ่าย";
+            base64PhotoTemp = member.photo || "";
+
+            const aliveRadios = document.querySelectorAll('input[name="isAlive"]');
+            aliveRadios.forEach(r => r.checked = (r.value === String(member.isAlive)));
+            toggleDeathDateInput();
+
+            document.getElementById("relInfoBanner").classList.add("hidden");
+            document.getElementById("memberModal").classList.remove("hidden");
+        };
+
+        window.openAddModal = (targetId = null, relType = null) => {
+            document.getElementById("modalTitle").textContent = "เพิ่มสมาชิกใหม่ในผังตระกูล";
+            document.getElementById("memberForm").reset();
+            document.getElementById("memberId").value = "";
+            document.getElementById("relTargetId").value = targetId || "";
+            document.getElementById("relType").value = relType || "";
+            document.getElementById("photoPreview").src = "https://placehold.co/120x120/f3e8ff/78350f?text=รูปถ่าย";
+            base64PhotoTemp = "";
+
+            const banner = document.getElementById("relInfoBanner");
+            if (targetId && relType) {
+                const target = familyData.find(m => m.id === targetId);
+                const names = { parent: "พ่อ/แม่", spouse: "คู่สมรส", child: "ลูก", sibling: "พี่/น้อง" };
+                document.getElementById("relInfoText").textContent = `เพิ่มเป็น ${names[relType]} ของ ${target.firstName}`;
+                banner.classList.remove("hidden");
+            } else {
+                banner.classList.add("hidden");
+            }
+
+            document.getElementById("memberModal").classList.remove("hidden");
+        };
+
+        window.saveMemberForm = async () => {
+            const form = document.getElementById("memberForm");
+            if (!form.checkValidity()) { form.reportValidity(); return; }
+
+            const id = document.getElementById("memberId").value;
+            const targetId = document.getElementById("relTargetId").value;
+            const relType = document.getElementById("relType").value;
+            const isAlive = document.querySelector('input[name="isAlive"]:checked').value === 'true';
+
+            const memberObj = {
+                id: id || `m_${Date.now()}`,
+                firstName: document.getElementById("firstName").value.trim(),
+                lastName: document.getElementById("lastName").value.trim(),
+                maidenName: document.getElementById("maidenName").value.trim(),
+                nickname: document.getElementById("nickname").value.trim(),
+                gender: document.getElementById("gender").value,
+                badgeSymbol: document.getElementById("badgeSymbol").value,
+                isAlive: isAlive,
+                birthDate: document.getElementById("birthDate").value,
+                birthPlace: document.getElementById("birthPlace").value.trim(),
+                deathDate: isAlive ? "" : document.getElementById("deathDate").value,
+                deathPlace: isAlive ? "" : document.getElementById("deathPlace").value.trim(),
+                profession: document.getElementById("profession").value.trim(),
+                phone: document.getElementById("phone").value.trim(),
+                address: document.getElementById("address").value.trim(),
+                bio: document.getElementById("bio").value.trim(),
+                photo: base64PhotoTemp || "https://placehold.co/120x120/f3e8ff/78350f?text=รูปถ่าย",
+                spouseIds: [], parentIds: [], childrenIds: []
+            };
+
+            if (id) {
+                const idx = familyData.findIndex(m => m.id === id);
+                if (idx !== -1) {
+                    memberObj.spouseIds = familyData[idx].spouseIds || [];
+                    memberObj.parentIds = familyData[idx].parentIds || [];
+                    memberObj.childrenIds = familyData[idx].childrenIds || [];
+                    familyData[idx] = memberObj;
+                }
+            } else {
+                if (targetId && relType) {
+                    const target = familyData.find(m => m.id === targetId);
+                    if (target) {
+                        if (relType === 'spouse') {
+                            memberObj.spouseIds.push(target.id);
+                            target.spouseIds = target.spouseIds || [];
+                            if (!target.spouseIds.includes(memberObj.id)) target.spouseIds.push(memberObj.id);
+                        } else if (relType === 'child') {
+                            memberObj.parentIds.push(target.id);
+                            target.childrenIds = target.childrenIds || [];
+                            if (!target.childrenIds.includes(memberObj.id)) target.childrenIds.push(memberObj.id);
+                        } else if (relType === 'parent') {
+                            memberObj.childrenIds.push(target.id);
+                            target.parentIds = target.parentIds || [];
+                            if (!target.parentIds.includes(memberObj.id)) target.parentIds.push(memberObj.id);
+                        } else if (relType === 'sibling') {
+                            memberObj.parentIds = [...(target.parentIds || [])];
+                            (target.parentIds || []).forEach(pId => {
+                                const parent = familyData.find(m => m.id === pId);
+                                if (parent) {
+                                    parent.childrenIds = parent.childrenIds || [];
+                                    if (!parent.childrenIds.includes(memberObj.id)) parent.childrenIds.push(memberObj.id);
+                                }
+                            });
+                        }
+                    }
+                }
+                familyData.push(memberObj);
+            }
+
+            closeModal();
+            renderTree();
+            await saveFamilyDataToCloud();
+        };
+
+        window.handleImageUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                base64PhotoTemp = e.target.result;
+                document.getElementById("photoPreview").src = base64PhotoTemp;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.toggleDeathDateInput = () => {
+            const isAlive = document.querySelector('input[name="isAlive"]:checked').value === 'true';
+            const deathContainer = document.getElementById("deathDateContainer");
+            if (isAlive) {
+                deathContainer.classList.add("opacity-50", "pointer-events-none");
+            } else {
+                deathContainer.classList.remove("opacity-50", "pointer-events-none");
+            }
+        };
+
+        window.closeModal = () => document.getElementById("memberModal").classList.add("hidden");
+        window.closeAuthModal = () => document.getElementById("authModal").classList.add("hidden");
+        window.openAuthModal = (tab = 'login') => {
+            switchAuthTab(tab);
+            document.getElementById("authModal").classList.remove("hidden");
+        };
+
+        window.switchAuthTab = (tab) => {
+            const loginForm = document.getElementById("loginForm");
+            const regForm = document.getElementById("registerForm");
+            const tabLogin = document.getElementById("tabLoginBtn");
+            const tabReg = document.getElementById("tabRegisterBtn");
+
+            if (tab === 'login') {
+                loginForm.classList.remove("hidden");
+                regForm.classList.add("hidden");
+                tabLogin.className = "flex-1 py-3 text-sm font-semibold text-amber-900 border-b-2 border-amber-800 bg-[#fcf9f2]";
+                tabReg.className = "flex-1 py-3 text-sm font-semibold text-amber-800/60 hover:text-amber-950";
+            } else {
+                loginForm.classList.add("hidden");
+                regForm.classList.remove("hidden");
+                tabReg.className = "flex-1 py-3 text-sm font-semibold text-amber-900 border-b-2 border-amber-800 bg-[#fcf9f2]";
+                tabLogin.className = "flex-1 py-3 text-sm font-semibold text-amber-800/60 hover:text-amber-950";
+            }
+        };
+
+        /* ==========================================================================
+           CONNECT RELATIONSHIPS TOOL
+           ========================================================================== */
         window.toggleConnectMode = (forceState = null) => {
             isConnectMode = forceState !== null ? forceState : !isConnectMode;
             selectedFirstMemberId = null;
@@ -965,13 +1101,13 @@
             const banner = document.getElementById("connectNoticeBanner");
 
             if (isConnectMode) {
-                btn.classList.add("bg-indigo-600", "text-white");
-                btn.classList.remove("bg-slate-100", "text-slate-700");
+                btn.classList.add("bg-amber-800", "text-white");
+                btn.classList.remove("bg-amber-100/80", "text-amber-900");
                 banner.classList.remove("hidden");
                 document.getElementById("connectNoticeText").textContent = "คลิกเลือกสมาชิกคนที่ 1 เพื่อเริ่มเชื่อมความสัมพันธ์...";
             } else {
-                btn.classList.remove("bg-indigo-600", "text-white");
-                btn.classList.add("bg-slate-100", "text-slate-700");
+                btn.classList.remove("bg-amber-800", "text-white");
+                btn.classList.add("bg-amber-100/80", "text-amber-900");
                 banner.classList.add("hidden");
             }
             renderTree();
@@ -1046,182 +1182,149 @@
         }
 
         /* ==========================================================================
-           MEMBER FORM & CRUD
+           FIRESTORE DATABASE & CLOUD SYNC
            ========================================================================== */
+        function subscribeToFamilyTreeData(userId) {
+            updateSyncStatus('syncing', 'กำลังโหลดข้อมูล...');
+            const docRef = doc(db, 'artifacts', appId, 'users', userId, 'family_tree', 'main_tree');
 
-        window.openEditModal = (memberId) => {
-            const member = familyData.find(m => m.id === memberId);
-            if (!member) return;
+            if (unsubscribeFirestore) unsubscribeFirestore();
 
-            document.getElementById("modalTitle").textContent = "แก้ไขข้อมูลสมาชิก";
-            document.getElementById("memberId").value = member.id;
-            document.getElementById("relTargetId").value = "";
-            document.getElementById("relType").value = "";
-            document.getElementById("firstName").value = member.firstName || "";
-            document.getElementById("lastName").value = member.lastName || "";
-            document.getElementById("nickname").value = member.nickname || "";
-            document.getElementById("gender").value = member.gender || "male";
-            document.getElementById("badgeSymbol").value = member.badgeSymbol || "";
-            document.getElementById("birthDate").value = member.birthDate || "";
-            document.getElementById("deathDate").value = member.deathDate || "";
-            document.getElementById("phone").value = member.phone || "";
-            document.getElementById("address").value = member.address || "";
-            document.getElementById("bio").value = member.bio || "";
-            document.getElementById("photoPreview").src = member.photo || "https://placehold.co/120x120/e2e8f0/64748b?text=%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%96%E0%B9%88%E0%B8%B2%E0%B8%A2";
-            base64PhotoTemp = member.photo || "";
-
-            const aliveRadios = document.querySelectorAll('input[name="isAlive"]');
-            aliveRadios.forEach(r => r.checked = (r.value === String(member.isAlive)));
-            toggleDeathDateInput();
-
-            document.getElementById("relInfoBanner").classList.add("hidden");
-            document.getElementById("memberModal").classList.remove("hidden");
-        };
-
-        window.openAddModal = (targetId = null, relType = null) => {
-            document.getElementById("modalTitle").textContent = "เพิ่มสมาชิกใหม่";
-            document.getElementById("memberForm").reset();
-            document.getElementById("memberId").value = "";
-            document.getElementById("relTargetId").value = targetId || "";
-            document.getElementById("relType").value = relType || "";
-            document.getElementById("photoPreview").src = "https://placehold.co/120x120/e2e8f0/64748b?text=%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%96%E0%B9%88%E0%B8%B2%E0%B8%A2";
-            base64PhotoTemp = "";
-
-            const banner = document.getElementById("relInfoBanner");
-            if (targetId && relType) {
-                const target = familyData.find(m => m.id === targetId);
-                const names = { parent: "พ่อ/แม่", spouse: "คู่สมรส", child: "ลูก" };
-                document.getElementById("relInfoText").textContent = `เพิ่มเป็น ${names[relType]} ของ ${target.firstName}`;
-                banner.classList.remove("hidden");
-            } else {
-                banner.classList.add("hidden");
-            }
-
-            document.getElementById("memberModal").classList.remove("hidden");
-        };
-
-        window.saveMemberForm = async () => {
-            const form = document.getElementById("memberForm");
-            if (!form.checkValidity()) { form.reportValidity(); return; }
-
-            const id = document.getElementById("memberId").value;
-            const targetId = document.getElementById("relTargetId").value;
-            const relType = document.getElementById("relType").value;
-            const isAlive = document.querySelector('input[name="isAlive"]:checked').value === 'true';
-
-            const memberObj = {
-                id: id || `m_${Date.now()}`,
-                firstName: document.getElementById("firstName").value.trim(),
-                lastName: document.getElementById("lastName").value.trim(),
-                nickname: document.getElementById("nickname").value.trim(),
-                gender: document.getElementById("gender").value,
-                badgeSymbol: document.getElementById("badgeSymbol").value,
-                isAlive: isAlive,
-                birthDate: document.getElementById("birthDate").value,
-                deathDate: isAlive ? "" : document.getElementById("deathDate").value,
-                phone: document.getElementById("phone").value.trim(),
-                address: document.getElementById("address").value.trim(),
-                bio: document.getElementById("bio").value.trim(),
-                photo: base64PhotoTemp || "https://placehold.co/120x120/e2e8f0/64748b?text=%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%96%E0%B9%88%E0%B8%B2%E0%B8%A2",
-                spouseIds: [], parentIds: [], childrenIds: []
-            };
-
-            if (id) {
-                const idx = familyData.findIndex(m => m.id === id);
-                if (idx !== -1) {
-                    memberObj.spouseIds = familyData[idx].spouseIds || [];
-                    memberObj.parentIds = familyData[idx].parentIds || [];
-                    memberObj.childrenIds = familyData[idx].childrenIds || [];
-                    familyData[idx] = memberObj;
+            unsubscribeFirestore = onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists() && docSnap.data().members && docSnap.data().members.length > 0) {
+                    familyData = docSnap.data().members;
+                } else {
+                    // Initialize with Default Xeem Lis Tree if cloud database is empty
+                    familyData = defaultXeemLisTree;
+                    saveFamilyDataToCloud();
                 }
-            } else {
-                if (targetId && relType) {
-                    const target = familyData.find(m => m.id === targetId);
-                    if (target) {
-                        if (relType === 'spouse') {
-                            memberObj.spouseIds.push(target.id);
-                            target.spouseIds = target.spouseIds || [];
-                            if (!target.spouseIds.includes(memberObj.id)) target.spouseIds.push(memberObj.id);
-                        } else if (relType === 'child') {
-                            memberObj.parentIds.push(target.id);
-                            target.childrenIds = target.childrenIds || [];
-                            if (!target.childrenIds.includes(memberObj.id)) target.childrenIds.push(memberObj.id);
-                        } else if (relType === 'parent') {
-                            memberObj.childrenIds.push(target.id);
-                            target.parentIds = target.parentIds || [];
-                            if (!target.parentIds.includes(memberObj.id)) target.parentIds.push(memberObj.id);
-                        }
-                    }
-                }
-                familyData.push(memberObj);
-            }
-
-            closeModal();
-            renderTree();
-            await saveFamilyDataToCloud();
-        };
-
-        window.toggleDeathDateInput = () => {
-            const isAlive = document.querySelector('input[name="isAlive"]:checked').value === 'true';
-            const deathContainer = document.getElementById("deathDateContainer");
-            if (isAlive) {
-                deathContainer.classList.add("opacity-50", "pointer-events-none");
-            } else {
-                deathContainer.classList.remove("opacity-50", "pointer-events-none");
-            }
-        };
-
-        function openDetailDrawer(memberId) {
-            const member = familyData.find(m => m.id === memberId);
-            if (!member) return;
-
-            document.getElementById("drawerBody").innerHTML = `
-                <div class="text-center pb-4 border-b border-slate-100">
-                    <img src="${member.photo || 'https://placehold.co/120x120'}" class="w-20 h-20 rounded-full object-cover mx-auto mb-2 shadow">
-                    <h2 class="text-lg font-bold text-slate-800">${member.badgeSymbol || ''} ${member.firstName} ${member.lastName || ''}</h2>
-                    <span class="text-xs text-indigo-600">${member.nickname ? `(${member.nickname})` : ''}</span>
-                </div>
-                <div class="space-y-2 text-xs">
-                    <p><span class="text-slate-400">สถานะ:</span> ${member.isAlive ? 'ยังมีชีวิตอยู่' : 'เสียชีวิตแล้ว'}</p>
-                    <p><span class="text-slate-400">วันเกิด:</span> ${member.birthDate || '-'}</p>
-                    ${!member.isAlive ? `<p><span class="text-slate-400">วันที่เสียชีวิต:</span> ${member.deathDate || '-'}</p>` : ''}
-                    <p><span class="text-slate-400">เบอร์โทร:</span> ${member.phone || '-'}</p>
-                    <p><span class="text-slate-400">ที่อยู่:</span> ${member.address || '-'}</p>
-                    <p><span class="text-slate-400">ประวัติสังเขป:</span> ${member.bio || '-'}</p>
-                </div>
-            `;
-
-            document.getElementById("drawerEditBtn").onclick = () => {
-                closeDetailDrawer();
-                openEditModal(memberId);
-            };
-
-            document.getElementById("drawerDeleteBtn").onclick = async () => {
-                if (confirm("ลบสมาชิกรายนี้ออกจากผังตระกูล?")) {
-                    familyData = familyData.filter(m => m.id !== memberId);
-                    // Clear references
-                    familyData.forEach(m => {
-                        m.childrenIds = (m.childrenIds || []).filter(id => id !== memberId);
-                        m.spouseIds = (m.spouseIds || []).filter(id => id !== memberId);
-                        m.parentIds = (m.parentIds || []).filter(id => id !== memberId);
-                    });
-                    closeDetailDrawer();
-                    renderTree();
-                    await saveFamilyDataToCloud();
-                }
-            };
-
-            document.getElementById("detailDrawer").classList.remove("translate-x-full");
+                renderTree();
+                updateSyncStatus('online', 'ซิงค์ข้อมูล Cloud แล้ว');
+            }, (error) => {
+                console.error("Firestore Error:", error);
+                updateSyncStatus('error', 'ข้อผิดพลาดการเชื่อมต่อ');
+            });
         }
 
-        window.closeDetailDrawer = () => document.getElementById("detailDrawer").classList.add("translate-x-full");
+        async function saveFamilyDataToCloud() {
+            if (!currentUser) {
+                localStorage.setItem("family_tree_local_data", JSON.stringify(familyData));
+                updateSyncStatus('offline', 'บันทึกลงในเครื่อง');
+                return;
+            }
+
+            updateSyncStatus('syncing', 'กำลังบันทึก...');
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'family_tree', 'main_tree');
+                await setDoc(docRef, {
+                    members: familyData,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+                updateSyncStatus('online', 'บันทึกสำเร็จ');
+            } catch (err) {
+                console.error("Cloud Save Error:", err);
+                updateSyncStatus('error', 'บันทึกไม่สำเร็จ');
+            }
+        }
+
+        /* ==========================================================================
+           AUTH HANDLERS & HELPERS
+           ========================================================================== */
+        window.handleEmailLogin = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                closeAuthModal();
+                showToast("เข้าสู่ระบบเรียบร้อยแล้ว", "success");
+            } catch (err) {
+                showToast("เข้าสู่ระบบไม่สำเร็จ: " + err.message, "error");
+            }
+        };
+
+        window.handleEmailRegister = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("regDisplayName").value;
+            const email = document.getElementById("regEmail").value;
+            const password = document.getElementById("regPassword").value;
+            try {
+                const res = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(res.user, { displayName: name });
+                closeAuthModal();
+                showToast("สมัครสมาชิกสำเร็จ!", "success");
+            } catch (err) {
+                showToast("ลงทะเบียนไม่สำเร็จ: " + err.message, "error");
+            }
+        };
+
+        window.handleGoogleSignIn = async () => {
+            try {
+                const provider = new GoogleAuthProvider();
+                await signInWithPopup(auth, provider);
+                closeAuthModal();
+                showToast("เข้าสู่ระบบด้วย Google เรียบร้อยแล้ว", "success");
+            } catch (err) {
+                showToast("การเข้าสู่ระบบผ่าน Google ขัดข้อง", "error");
+            }
+        };
+
+        window.handleAnonymousSignIn = async () => {
+            try {
+                await signInAnonymously(auth);
+                closeAuthModal();
+                showToast("เข้าสู่ระบบชั่วคราวในฐานะ Guest", "info");
+            } catch (err) {
+                showToast("เข้าใช้งานแบบ Guest ไม่สำเร็จ", "error");
+            }
+        };
+
+        window.handleSignOut = async () => {
+            await signOut(auth);
+            showToast("ออกจากระบบแล้ว", "info");
+        };
+
+        function updateAuthUI(user) {
+            const loginBtn = document.getElementById("loginModalBtn");
+            const userInfo = document.getElementById("userInfoDropdown");
+            const userName = document.getElementById("userDisplayName");
+
+            if (user && !user.isAnonymous) {
+                loginBtn?.classList.add("hidden");
+                userInfo?.classList.remove("hidden");
+                if (userName) userName.textContent = user.displayName || user.email || "สมาชิก";
+            } else {
+                loginBtn?.classList.remove("hidden");
+                userInfo?.classList.add("hidden");
+            }
+        }
+
+        function updateSyncStatus(status, text) {
+            const syncStatus = document.getElementById("syncStatus");
+            const syncDot = document.getElementById("syncDot");
+            const syncText = document.getElementById("syncText");
+
+            if (!syncStatus || !syncDot || !syncText) return;
+
+            syncStatus.classList.remove("hidden");
+            syncText.textContent = text;
+
+            if (status === 'online') {
+                syncDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+            } else if (status === 'syncing') {
+                syncDot.className = "w-2 h-2 rounded-full bg-amber-500 animate-spin";
+            } else {
+                syncDot.className = "w-2 h-2 rounded-full bg-rose-500";
+            }
+        }
 
         function setupSearch() {
             const input = document.getElementById("searchInput");
+            if (!input) return;
             input.addEventListener("input", (e) => {
                 const query = e.target.value.toLowerCase().trim();
                 if (!query) return;
-                const match = familyData.find(m => m.firstName.toLowerCase().includes(query));
+                const match = familyData.find(m => m.firstName.toLowerCase().includes(query) || (m.nickname && m.nickname.toLowerCase().includes(query)));
                 if (match) {
                     const card = document.querySelector(`[data-id="${match.id}"]`);
                     if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1231,10 +1334,10 @@
 
         function showToast(message, type = "info") {
             const toast = document.createElement("div");
-            toast.className = "bg-slate-800 text-white px-4 py-2 rounded-lg text-xs shadow-lg animate-fade-in";
+            toast.className = "bg-amber-950 text-amber-50 px-4 py-2.5 rounded-xl text-xs shadow-xl animate-fade-in border border-amber-800/40";
             toast.textContent = message;
             document.getElementById("toastContainer").appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            setTimeout(() => toast.remove(), 3200);
         }
     </script>
 </body>
